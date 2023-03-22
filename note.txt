@@ -1,0 +1,5 @@
+Server Creation 
+---------------
+
+1  - NPM init
+2  - install express    npm install express
