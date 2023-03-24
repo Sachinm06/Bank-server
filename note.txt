@@ -3,3 +3,11 @@ Server Creation
 
 1  - NPM init
 2  - install express    npm install express
+
+
+steps
+-----
+
+1  -  import express
+2  -  create app using express
+3  -  setting port to run the app (3000)
