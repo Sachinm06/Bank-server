@@ -11,3 +11,30 @@ steps
 1  -  import express
 2  -  create app using express
 3  -  setting port to run the app (3000)
+
+
+JWT (Json web token)
+---------------------
+
+-user authentication
+-jsonwebtoken  -  libery used to generate tokens
+-sign()    -   method to generate token
+-verify()  -   method used to token verification
+
+
+Token verification
+------------------
+
+MiddleWares
+-----------
+
+-its a function with 3 arguments (req-res-next)
+-have the capacity to control http request in node
+-two types of meddleware
+
+     -1. application specific middleware  -it happens before all the http methods
+     -2. router specific middleware   -can apply only to the speciffic request
+
+-next()  -method used inside middleware to continue node execusion
+
+

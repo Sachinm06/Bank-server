@@ -1,3 +1,6 @@
+
+const jwt = require("jsonwebtoken")
+
 userDetails = {
     1000: { username: "anu", acno: 1000, password: "abc123", balance: 0, transaction: [] },
     1001: { username: "arun", acno: 1001, password: "abc123", balance: 0, transaction: [] },
@@ -32,12 +35,16 @@ login = (acno, psw) => {
             currentUser = userDetails[acno]["username"]
             currentAcno = acno
 
+            //token create
+            const token = jwt.sign({ acno }, "superkey123")
+
             return {
                 status: true,
                 messsage: "login success",
                 statusCode: 200,
                 currentUser,
-                currentAcno
+                currentAcno,
+                token
             }
         }
         else {
@@ -76,7 +83,7 @@ deposit = (acno, psw, amnt) => {
 
             return {
                 status: true,
-                messsage: `your account has been credited with amount ${amount} and the balance is ${userDetails[acno]["balance"]}`,
+                messsage: `your account has been credited with amount ${amount} and the balance is ${userDetails[acno].balance}`,
                 statusCode: 200,
 
             }
@@ -120,14 +127,14 @@ withdrew = (acno, psw, amt) => {
 
                 return {
                     status: true,
-                    messsage: `your account has been credited with amount ${amount} and the balance is ${userDetails[acno]["balance"]}`,
+                    messsage: `your account has been debited with amount ${amount} and the balance is ${userDetails[acno]["balance"]}`,
                     statusCode: 200,
 
                 }
 
             }
             else {
-                return{
+                return {
                     status: false,
                     messsage: "Insufficient balance",
                     statusCode: 404
@@ -146,14 +153,22 @@ withdrew = (acno, psw, amt) => {
     else {
         return {
             status: false,
-            messsage: "Incorrect password",
+            messsage: "Incorrect acno",
             statusCode: 404
         }
     }
 }
 
 
+getTransaction = (acno) => {
+    return {
+        status: true,
+        transaction: userDetails[acno].transaction,
+        statusCode: 200
+    }
+}
+
 
 module.exports = {
-    register, login, deposit, withdrew
+    register, login, deposit, withdrew, getTransaction
 }
