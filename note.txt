@@ -38,3 +38,58 @@ MiddleWares
 -next()  -method used inside middleware to continue node execusion
 
 
+
+
+MongoDB
+-------
+
+1  - to see the databases
+         - show databases
+2  - to open a db
+         - use (databaseName)
+
+3  - to list collections
+          - show collections
+
+4  - to show the datas inside a collections
+          - db.(collectionName).find()
+
+5  -  to show single data inside a collection
+           - db.(collections).findOne({key:value})
+
+           - db.users.findOne({acno:1000})   - present   -full data of that object
+                                             - not present -null
+
+6  -  insert new data
+           - db.(collectionName).insertOne({key:values})
+
+7  -  to find datas using a particulear condition
+           - db.(collectionName).find({condition})         
+                  condition create using query selection operators 
+           - to access datas which have 40000 greater balance
+           db.users.find({balance:{gt:40000}})  
+
+8  -  delete a data from collection
+           - db.(collectionName).deleteOne({key:value})    -delete count =0   
+
+9  -  update 
+           - db.(collectionName).updateOne({oldkey:oldvalue},{$set:{newkey:newvalue}})
+           - db.users.updateOne({username:anu},{$set:{username:anu v}})                        
+
+
+db server intergration (mdb  node connection)
+---------------------- 27017 3000
+
+mongoose   -  library used to integrate mogodb and server
+           -  npm i mongoose
+
+connect()  - method used to create connection string
+
+model()    - method used to create model
+
+steps
+-----
+
+1 - import mongoose
+2 - connection string creation
+3 - model creation for collection  (model name is singular form of collection name)
