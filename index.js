@@ -45,8 +45,10 @@ const jwtmiddleware = (req, res, next) => {
 
 app.post("/register", (req, res) => {
 
-    const result = ds.register(req.body.acno, req.body.uname, req.body.psw)
-    res.status(result.statusCode).json(result)
+    ds.register(req.body.acno, req.body.uname, req.body.psw).then(result => {
+        res.status(result.statusCode).json(result)
+
+    })
 })
 
 //login

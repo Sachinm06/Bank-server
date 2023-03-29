@@ -93,3 +93,12 @@ steps
 1 - import mongoose
 2 - connection string creation
 3 - model creation for collection  (model name is singular form of collection name)
+
+
+Asynchronous Method Handling In JS
+----------------------------------
+
+promise     - resolve    then()
+            - reject     catch()
+
+            

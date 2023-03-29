@@ -14,6 +14,6 @@ const User = mongoose.model("User",
         transaction: []
     })
 
-    module.exports={
-        User
-    }
+module.exports = {
+    User
+}
