@@ -2,12 +2,12 @@
 const jwt = require("jsonwebtoken")
 const db = require('./db')
 
-userDetails = {
-    1000: { username: "anu", acno: 1000, password: "abc123", balance: 0, transaction: [] },
-    1001: { username: "arun", acno: 1001, password: "abc123", balance: 0, transaction: [] },
-    1002: { username: "amal", acno: 1002, password: "abc123", balance: 0, transaction: [] },
-    1003: { username: "mega", acno: 1003, password: "abc123", balance: 0, transaction: [] },
-}
+// userDetails = {
+//     1000: { username: "anu", acno: 1000, password: "abc123", balance: 0, transaction: [] },
+//     1001: { username: "arun", acno: 1001, password: "abc123", balance: 0, transaction: [] },
+//     1002: { username: "amal", acno: 1002, password: "abc123", balance: 0, transaction: [] },
+//     1003: { username: "mega", acno: 1003, password: "abc123", balance: 0, transaction: [] },
+// }
 
 
 register = (acno, uname, psw) => {
@@ -40,14 +40,14 @@ register = (acno, uname, psw) => {
 }
 
 
-login = (acno, psw) => {
-    if (acno in userDetails) {
-        if (psw == userDetails[acno]["password"]) {
-            //store current user
-            currentUser = userDetails[acno]["username"]
-            currentAcno = acno
 
-            //token create
+
+login = (acno, psw) => {
+
+    return db.User.findOne({ acno, password: psw }).then(user => {
+        if (user) {
+            currentUser = user.username
+            currentAcno = acno
             const token = jwt.sign({ acno }, "superkey123")
 
             return {
@@ -62,44 +62,28 @@ login = (acno, psw) => {
         else {
             return {
                 status: false,
-                messsage: "Incorrect password",
+                messsage: "Incorrect acno or password",
                 statusCode: 404
             }
         }
-    }
-    else {
-        return {
-            status: false,
-            messsage: "not registred yet",
-            statusCode: 404
-        }
-    }
+    })
 }
 
 
 deposit = (acno, psw, amnt) => {
     //to convert string amount to int
     var amount = parseInt(amnt)
-
-    if (acno in userDetails) {
-        if (psw == userDetails[acno]["password"]) {
-            userDetails[acno]["balance"] += amount
-
-            //add transaction data
-            userDetails[acno]["transaction"].push(
-                {
-                    type: "credit",
-                    amount: amount
-                }
-            )
-
+    return db.User.findOne({ acno, password: psw }).then(user => {
+        if (user) {
+            user["balance"] += amount
+            user.transaction.push({ Type: "credit", Amount: amount })
+            user.save()
             return {
                 status: true,
-                messsage: `your account has been credited with amount ${amount} and the balance is ${userDetails[acno].balance}`,
+                messsage: `your account has been credited with amount ${amount} and the balance is ${user.balance}`,
                 statusCode: 200,
 
             }
-
         }
         else {
             return {
@@ -108,14 +92,7 @@ deposit = (acno, psw, amnt) => {
                 statusCode: 404
             }
         }
-    }
-    else {
-        return {
-            status: false,
-            messsage: "Incorrect acno",
-            statusCode: 404
-        }
-    }
+    })
 }
 
 
@@ -123,27 +100,21 @@ withdrew = (acno, psw, amt) => {
     //to convert string amount to int
     var amount = parseInt(amt)
 
-    if (acno in userDetails) {
-        if (psw == userDetails[acno]["password"]) {
-            if (amount <= userDetails[acno]["balance"]) {
-                userDetails[acno]["balance"] -= amount
-
-                //add transaction data
-                userDetails[acno]["transaction"].push(
-                    {
-                        type: "debit",
-                        amount: amount
-                    }
-                )
-
-
+    return db.User.findOne({ acno, password: psw }).then(user => {
+        if (user) {
+            if (amount <= user.balance) {
+                user.balance -= amount
+                user.transaction.push({
+                    type: "debit",
+                    amount: amount
+                })
+                user.save()
                 return {
                     status: true,
-                    messsage: `your account has been debited with amount ${amount} and the balance is ${userDetails[acno]["balance"]}`,
+                    messsage: `your account has been debited with amount ${amount} and the balance is ${user.balance}`,
                     statusCode: 200,
 
                 }
-
             }
             else {
                 return {
@@ -152,32 +123,29 @@ withdrew = (acno, psw, amt) => {
                     statusCode: 404
                 }
             }
-
         }
         else {
             return {
                 status: false,
-                messsage: "Incorrect password",
+                messsage: "Incorrect acno or password",
                 statusCode: 404
             }
+
         }
-    }
-    else {
-        return {
-            status: false,
-            messsage: "Incorrect acno",
-            statusCode: 404
-        }
-    }
+    })
 }
 
-
 getTransaction = (acno) => {
-    return {
-        status: true,
-        transaction: userDetails[acno].transaction,
-        statusCode: 200
-    }
+    return db.User.findOne({ acno }).then(user => {
+        if (user) {
+            return {
+                status: true,
+                transaction: user.transaction,
+                statusCode: 200
+            }
+        }
+    })
+
 }
 
 

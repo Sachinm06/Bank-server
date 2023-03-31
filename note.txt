@@ -101,4 +101,8 @@ Asynchronous Method Handling In JS
 promise     - resolve    then()
             - reject     catch()
 
-            
+CORS ( cross origin resource sharing)
+-------------------------------------
+
+libary used to integrate frontend with node 
+4200 - 3000

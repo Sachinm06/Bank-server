@@ -3,6 +3,9 @@
 
 const express = require("express")
 
+//import cors
+const cors=require("cors")
+
 //import ds
 
 const ds = require('./service/dataService')
@@ -14,6 +17,10 @@ const jwt = require("jsonwebtoken")
 //app creation 
 
 const app = express()
+
+//integrate app with frontend
+
+app.use(cors({origin:'http://localhost:4200'}))
 
 // to convert all datas from json to js
 
@@ -55,32 +62,40 @@ app.post("/register", (req, res) => {
 
 app.post("/login", (req, res) => {
 
-    const result = ds.login(req.body.acno, req.body.psw)
-    res.status(result.statusCode).json(result)
+    ds.login(req.body.acno, req.body.psw).then(result => {
+        res.status(result.statusCode).json(result)
+
+    })
 })
 
 //deposit
 
-app.post("/deposit", jwtmiddleware, (req, res) => {
+app.post("/deposit", jwtmiddleware, (req,res) => {
 
-    const result = ds.deposit(req.body.acno, req.body.psw, req.body.amnt)
-    res.status(result.statusCode).json(result)
+    ds.deposit(req.body.acno, req.body.psw, req.body.amnt).then(result => {
+        res.status(result.statusCode).json(result)
+
+    })
 })
 
 //withdraw
 
 app.post("/withdrew", (req, res) => {
 
-    const result = ds.withdrew(req.body.acno, req.body.psw, req.body.amnt)
-    res.status(result.statusCode).json(result)
+    ds.withdrew(req.body.acno, req.body.psw, req.body.amnt).then(result => {
+        res.status(result.statusCode).json(result)
+
+    })
 })
 
 //transaction
 
 app.get("/getTransaction", (req, res) => {
 
-    const result = ds.getTransaction(req.body.acno)
-    res.status(result.statusCode).json(result)
+    ds.getTransaction(req.body.acno).then(result => {
+        res.status(result.statusCode).json(result)
+
+    })
 })
 
 //register post
