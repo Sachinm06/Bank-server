@@ -4,7 +4,7 @@
 const express = require("express")
 
 //import cors
-const cors=require("cors")
+const cors = require("cors")
 
 //import ds
 
@@ -20,7 +20,7 @@ const app = express()
 
 //integrate app with frontend
 
-app.use(cors({origin:'http://localhost:4200'}))
+app.use(cors({ origin: 'http://localhost:4200' }))
 
 // to convert all datas from json to js
 
@@ -70,7 +70,7 @@ app.post("/login", (req, res) => {
 
 //deposit
 
-app.post("/deposit", jwtmiddleware, (req,res) => {
+app.post("/deposit", jwtmiddleware, (req, res) => {
 
     ds.deposit(req.body.acno, req.body.psw, req.body.amnt).then(result => {
         res.status(result.statusCode).json(result)
@@ -80,7 +80,7 @@ app.post("/deposit", jwtmiddleware, (req,res) => {
 
 //withdraw
 
-app.post("/withdrew", (req, res) => {
+app.post("/withdrew", jwtmiddleware, (req, res) => {
 
     ds.withdrew(req.body.acno, req.body.psw, req.body.amnt).then(result => {
         res.status(result.statusCode).json(result)
@@ -90,7 +90,7 @@ app.post("/withdrew", (req, res) => {
 
 //transaction
 
-app.get("/getTransaction", (req, res) => {
+app.post("/getTransaction", jwtmiddleware, (req, res) => {
 
     ds.getTransaction(req.body.acno).then(result => {
         res.status(result.statusCode).json(result)
