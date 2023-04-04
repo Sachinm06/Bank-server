@@ -105,14 +105,14 @@ withdrew = (acno, psw, amt) => {
             if (amount <= user.balance) {
                 user.balance -= amount
                 user.transaction.push({
-                    type: "debit",
-                    amount: amount
+                    Type: "debit",
+                    Amount: amount
                 })
                 user.save()
                 return {
                     status: true,
                     messsage: `your account has been debited with amount ${amount} and the balance is ${user.balance}`,
-                    statusCode: 200,
+                    statusCode: 200
 
                 }
             }
@@ -148,7 +148,26 @@ getTransaction = (acno) => {
 
 }
 
+deleteAcc=(acno)=>{
+    return db.User.deleteOne({acno}).then(user=>{
+        if(user){
+            return{
+                status:true,
+                messsage:"account deleted",
+                statusCode:200
+            }
+        }
+        else{
+            return{
+                status:false,
+                messsage:"Invalid",
+                statusCode:401
+            }
+        }
+    })
+}
+
 
 module.exports = {
-    register, login, deposit, withdrew, getTransaction
-}
+    register, login, deposit, withdrew, getTransaction,deleteAcc
+};

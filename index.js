@@ -98,6 +98,12 @@ app.post("/getTransaction", jwtmiddleware, (req, res) => {
     })
 })
 
+app.delete("/delete/:acno", jwtmiddleware, (req, res) => {
+    ds.deleteAcc(req.params.acno).then(result => {
+        res.status(res.statusCode).json(result)
+    })
+})
+
 //register post
 //login get
 //deposit patch
